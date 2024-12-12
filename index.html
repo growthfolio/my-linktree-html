@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Felipe Macedo | Linktree</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    // Alternar tema entre claro e escuro
+    function toggleTheme() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+
+      // Alterar o ícone dinamicamente
+      const themeIcon = document.getElementById('theme-icon');
+      themeIcon.classList.toggle('ph-moon-stars');
+      themeIcon.classList.toggle('ph-sun');
+    }
+  </script>
+  <style>
+    [data-theme="dark"] {
+      --bg-color: #111827;
+      --text-color: #f9fafb;
+      --btn-bg: #1f2937;
+      --btn-hover: #374151;
+      --footer-color: #4b5563;
+    }
+
+    [data-theme="light"] {
+      --bg-color: #f9fafb;
+      --text-color: #111827;
+      --btn-bg: #e5e7eb;
+      --btn-hover: #d1d5db;
+      --footer-color: #9ca3af;
+    }
+  </style>
+</head>
+<body class="bg-[var(--bg-color)] text-[var(--text-color)] font-sans">
+  <!-- Botão de Alternar Tema -->
+  <button onclick="toggleTheme()" 
+    class="absolute top-4 right-4 px-4 py-2 rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] transition-all flex items-center justify-center">
+    <i id="theme-icon" class="ph-bold ph-moon-stars text-xl"></i>
+  </button>
+
+  <!-- Container principal -->
+  <div class="flex flex-col items-center min-h-screen py-8 px-4">
+    <!-- Foto de perfil -->
+    <img src="https://media.licdn.com/dms/image/v2/D4D03AQHKzQcWab8dmA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1702928254548?e=1739404800&v=beta&t=JuVBcY6AnqQARqPQSLepG8KSXt-x1AUJlo7yRYOETdg" 
+    alt="Felipe Macedo" 
+    class="rounded-full w-28 h-28 mb-4 border-4 border-green-500 shadow-md">
+    <h1 class="text-3xl font-bold mb-2">Felipe Macedo</h1>
+    <p class="text-base mb-8 text-center max-w-md">
+        Desenvolvedor Web Full-Stack | Entusiasta de Finanças & Economia | Aprendendo sempre
+    </p>
+    
+    <!-- Links -->
+    <div class="w-full max-w-md space-y-4">
+      <!-- GitHub -->
+      <a href="https://github.com/felipemacedo1" target="_blank" 
+      class="flex items-center justify-center bg-[var(--btn-bg)] text-[var(--text-color)] text-center py-4 rounded-lg shadow-lg hover:bg-[var(--btn-hover)] transition-all">
+      <div class="flex items-center justify-start">
+          <i class="ph-duotone ph-github-logo text-2xl mr-2"></i>
+          <span class="font-semibold">GitHub</span>
+      </div>  
+      </a>
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/in/felipemacedo1" target="_blank" 
+      class="flex items-center justify-center bg-[var(--btn-bg)] text-[var(--text-color)] text-center py-4 rounded-lg shadow-lg hover:bg-[var(--btn-hover)] transition-all">
+      <div class="flex items-center justify-start">
+          <i class="ph-duotone ph-linkedin-logo text-2xl mr-2"></i>
+          <span class="font-semibold">LinkedIn</span>
+      </div>  
+      </a>
+      <!-- Portfolio -->
+      <a href="https://github.com/growthfolio" target="_blank" 
+      class="flex items-center justify-center bg-[var(--btn-bg)] text-[var(--text-color)] text-center py-4 rounded-lg shadow-lg hover:bg-[var(--btn-hover)] transition-all">
+      <div class="flex items-center justify-start">
+          <i class="ph-bold ph-folder text-2xl mr-2"></i>
+          <span class="font-semibold">Portfolio</span>
+      </div>
+      </a>
+      <!-- Crypto Alert React -->
+      <a href="https://github.com/felipemacedo1/crypto-alert-react" target="_blank" 
+      class="flex items-center justify-center bg-[var(--btn-bg)] text-[var(--text-color)] text-center py-4 rounded-lg shadow-lg hover:bg-[var(--btn-hover)] transition-all">
+      <div class="flex items-center justify-start">
+          <i class="ph-bold ph-shield-check text-2xl mr-2"></i>
+          <span class="font-semibold">Crypto Alert React</span>
+      </div>
+      </a>
+    </div>
+    <!-- Footer -->
+    <footer class="mt-12 text-xs text-[var(--footer-color)]">
+      <p>© 2024 Felipe Macedo | <a href="https://github.com/felipemacedo1" class="hover:underline">GitHub</a></p>
+    </footer>
+  </div>
+</body>
+</html>
