@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badge Test - Melhorias Implementadas</title>
+    
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Seus estilos originais (simulados) -->
+    <style>
+        :root { --radius: 16px; }
+        
+        [data-theme="dark"]{
+            --bg: #0f1f2d;
+            --surface: #111827;
+            --surface-2: #1b2838;
+            --text: #F2F3F3;
+            --muted: #A8B3C2;
+            --brand: #FF9900;
+            --brand-contrast: #232F3E;
+        }
+        
+        [data-theme="light"]{
+            --bg: #FFFFFF;
+            --surface: #F2F3F3;
+            --surface-2: #EAEDED;
+            --text: #232F3E;
+            --muted: #5F6B7A;
+            --brand: #FF9900;
+            --brand-contrast: #111827;
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+        }
+    </style>
+    
+    <!-- Estilos das badges melhorados -->
+    <link rel="stylesheet" href="enhanced-badges.css">
+    <link rel="stylesheet" href="modal-styles.css">
+</head>
+<body class="min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold">Teste das Melhorias - Badges Credly</h1>
+            <button id="themeToggle" class="px-4 py-2 bg-orange-500 text-white rounded-lg">
+                Alternar Tema
+            </button>
+        </div>
+        
+        <!-- Badge de teste -->
+        <div class="mb-8">
+            <h2 class="text-lg font-semibold mb-4">Badge com melhorias aplicadas:</h2>
+            
+            <div class="badges-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
+                <!-- Badge do Credly real -->
+                <div class="badge-container card" 
+                     data-iframe-width="150" 
+                     data-iframe-height="270" 
+                     data-share-badge-id="5666c0c4-e3e8-41b5-afa8-f0e14ac3ae85" 
+                     data-share-badge-host="https://www.credly.com">
+                </div>
+                <div class="badge-container card" 
+                     data-iframe-width="150" 
+                     data-iframe-height="270" 
+                     data-share-badge-id="3e0210b2-b5a7-42ed-8ba8-b099d35348ca" 
+                     data-share-badge-host="https://www.credly.com">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Informações de debug -->
+        <div class="mt-8 p-4 bg-gray-800 rounded-lg text-green-400 font-mono text-sm">
+            <h3 class="text-white font-bold mb-2">Console de Debug:</h3>
+            <div id="debugInfo">
+                <p>• Badges carregando...</p>
+                <p>• Sistema de analytics ativo</p>
+                <p>• Observador de tema configurado</p>
+            </div>
+        </div>
+        
+        <!-- Controles de teste -->
+        <div class="mt-6 flex gap-4">
+            <button onclick="viewBadgeAnalytics()" class="px-4 py-2 bg-blue-600 text-white rounded">
+                Ver Analytics
+            </button>
+            <button onclick="getLeaderboard()" class="px-4 py-2 bg-green-600 text-white rounded">
+                Ver Gamificação
+            </button>
+            <button onclick="testTooltips()" class="px-4 py-2 bg-purple-600 text-white rounded">
+                Testar Tooltips
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.credly.com/assets/utilities/embed.js" async></script>
+    <script src="badge-manager.js"></script>
+    <script src="badge-gamification.js"></script>
+    
+    <script>
+        // Theme toggle functionality
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            
+            // Update debug info
+            updateDebugInfo(`Tema alterado para: ${newTheme}`);
+        });
+        
+        // Debug functions
+        function updateDebugInfo(message) {
+            const debugDiv = document.getElementById('debugInfo');
+            const p = document.createElement('p');
+            p.textContent = `• ${message}`;
+            debugDiv.appendChild(p);
+            
+            // Keep only last 5 messages
+            const messages = debugDiv.querySelectorAll('p');
+            if (messages.length > 5) {
+                messages[0].remove();
+            }
+        }
+        
+        function testTooltips() {
+            updateDebugInfo('Testando tooltips customizados...');
+            
+            // Simulate truncated text
+            setTimeout(() => {
+                const containers = document.querySelectorAll('.badge-container.loaded');
+                updateDebugInfo(`Encontradas ${containers.length} badges carregadas`);
+            }, 1000);
+        }
+        
+        // Override console.log to show in debug area
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            if (args[0] && typeof args[0] === 'string') {
+                updateDebugInfo(args.join(' '));
+            }
+        };
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDebugInfo('Sistema inicializado');
+            
+            // Check for loaded badges every 2 seconds
+            setInterval(() => {
+                const loadedBadges = document.querySelectorAll('.badge-container.loaded').length;
+                const totalBadges = document.querySelectorAll('.badge-container').length;
+                
+                if (loadedBadges > 0) {
+                    updateDebugInfo(`${loadedBadges}/${totalBadges} badges carregadas`);
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

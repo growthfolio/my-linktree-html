@@ -11,7 +11,7 @@
     <meta property="og:type" content="website" />
 
     <!-- Security Meta Tags (flexíveis para CDN) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self'; font-src 'self' https: https://cdn.jsdelivr.net;" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net https://cdn.credly.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self'; font-src 'self' https: https://cdn.jsdelivr.net; frame-src https://www.credly.com;" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
@@ -88,6 +88,207 @@
       .animate-in.show {opacity:1; transform:none}
       .skeleton {background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface) 50%, var(--surface-2) 75%); background-size:200% 100%; animation: loading 1.2s infinite}
       @keyframes loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
+      .badge-container {
+        min-height: 270px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        background: #FFFFFF;
+        border: 1px solid rgba(255,153,0,0.2);
+        position: relative;
+        overflow: hidden;
+      }
+      .badge-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,153,0,0.1), transparent);
+        transition: left 0.5s;
+      }
+      .badge-container:hover::before {
+        left: 100%;
+      }
+      .badge-container iframe {
+        border-radius: var(--radius);
+        box-shadow: 0 8px 24px rgba(0,0,0,.15);
+        transition: transform 0.3s ease;
+        position: relative;
+        z-index: 0;
+      }
+      .badge-container:hover iframe {
+        transform: scale(1.02);
+      }
+      [data-theme="dark"] .badge-container {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+        border: 2px solid rgba(255,153,0,0.4) !important;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important;
+        position: relative !important;
+      }
+      
+      /* Overlay escuro sobre o iframe no modo dark */
+      [data-theme="dark"] .badge-container::after {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background: rgba(0,0,0,0.3) !important;
+        pointer-events: none !important;
+        z-index: 1 !important;
+        border-radius: var(--radius) !important;
+      }
+
+      [data-theme="light"] .badge-container {
+        background: #232F3E;
+        border: 1px solid rgba(255,153,0,0.3);
+      }
+
+      /* 🏆 Badge Text Contrast Fix */
+      #badge-name {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
+        line-height: 1.3 !important;
+        margin-bottom: 8px !important;
+      }
+
+      #badge-issuer {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
+        line-height: 1.4 !important;
+        cursor: help !important;
+      }
+
+      /* Tema escuro - texto claro - FORÇA MÁXIMA */
+      [data-theme="dark"] #badge-name,
+      [data-theme="dark"] #badge-issuer,
+      [data-theme="dark"] .badge-name,
+      [data-theme="dark"] .badge-issuer,
+      [data-theme="dark"] .credly-badge .badge-name,
+      [data-theme="dark"] .credly-badge .badge-issuer,
+      [data-theme="dark"] iframe div div div h3,
+      [data-theme="dark"] iframe div div div p,
+      [data-theme="dark"] iframe * {
+        color: #FFFFFF !important;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.8) !important;
+        background: rgba(0,0,0,0.7) !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+      }
+
+      /* Tema claro - texto escuro */
+      [data-theme="light"] #badge-name,
+      [data-theme="light"] #badge-issuer,
+      [data-theme="light"] .badge-name,
+      [data-theme="light"] .badge-issuer {
+        color: #1a1a1a !important;
+        text-shadow: 0 1px 2px rgba(255,255,255,0.5) !important;
+        background: rgba(255,255,255,0.9) !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+      }
+
+      /* Badge container com fundo adaptativo */
+      .badge-container {
+        background: var(--bg) !important;
+        transition: all 0.3s ease !important;
+      }
+
+      /* Filtros CSS para melhorar contraste */
+      [data-theme="dark"] .badge-container iframe {
+        filter: contrast(1.4) brightness(1.4) saturate(1.2) invert(0.05) !important;
+        background: rgba(255,255,255,0.95) !important;
+        backdrop-filter: blur(0.5px) !important;
+        mix-blend-mode: screen !important;
+      }
+
+      [data-theme="light"] .badge-container iframe {
+        filter: contrast(1.1) brightness(0.95) !important;
+      }
+
+      /* Loading state para badges */
+      .badge-container.loading {
+        background: linear-gradient(
+          90deg,
+          var(--surface-2) 25%,
+          var(--surface) 50%,
+          var(--surface-2) 75%
+        );
+        background-size: 200% 100%;
+        animation: badge-loading 1.5s ease-in-out infinite;
+      }
+
+      .badge-container.loaded::after {
+        content: '✓';
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 20px;
+        height: 20px;
+        background: var(--success);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        opacity: 0;
+        animation: badge-success 0.5s ease-out 0.5s forwards;
+      }
+
+      @keyframes badge-loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+
+      @keyframes badge-success {
+        0% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Estado de erro para badges que não carregam */
+      .badge-container.error {
+        opacity: 0.6;
+        border: 2px dashed #ff6b6b;
+        background: rgba(255, 107, 107, 0.1);
+      }
+
+      .badge-container.error::after {
+        content: "⚠️ Badge não carregou";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 107, 107, 0.9);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        z-index: 10;
+        font-weight: 500;
+      }
     </style>
 
     <!-- JSON-LD (SEO) -->
@@ -194,6 +395,27 @@
         </a>
       </nav>
 
+      <!-- Certificações -->
+      <section class="mt-12 animate-in">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-[color:var(--brand)] to-orange-400 text-black font-semibold mb-4">
+            <i class="ph-duotone ph-certificate text-xl"></i>
+            <h2 class="text-lg">Certificações AWS</h2>
+          </div>
+          <p class="text-sm text-[color:var(--muted)] max-w-md mx-auto">Certificações oficiais da Amazon Web Services validando expertise em cloud computing</p>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="badge-container card bg-[var(--surface)] p-4" data-iframe-width="150" data-iframe-height="270" data-share-badge-id="5666c0c4-e3e8-41b5-afa8-f0e14ac3ae85" data-share-badge-host="https://www.credly.com"></div>
+          <div class="badge-container card bg-[var(--surface)] p-4" data-iframe-width="150" data-iframe-height="270" data-share-badge-id="3e0210b2-b5a7-42ed-8ba8-b099d35348ca" data-share-badge-host="https://www.credly.com"></div>
+          <div class="badge-container card bg-[var(--surface)] p-4" data-iframe-width="150" data-iframe-height="270" data-share-badge-id="7f62f225-3005-4043-b762-eb608f07636b" data-share-badge-host="https://www.credly.com"></div>
+          <div class="badge-container card bg-[var(--surface)] p-4" data-iframe-width="150" data-iframe-height="270" data-share-badge-id="947a0b6f-ebd4-4089-9158-48dc187c5068" data-share-badge-host="https://www.credly.com"></div>
+          <div class="badge-container card bg-[var(--surface)] p-4" data-iframe-width="150" data-iframe-height="270" data-share-badge-id="0ce03a22-0f7a-42a4-b12d-408ccf4441d9" data-share-badge-host="https://www.credly.com"></div>
+          <div class="badge-container card bg-[var(--surface)] p-4" data-iframe-width="150" data-iframe-height="270" data-share-badge-id="c1cb7ff3-a435-4f34-a046-dd5a1a885d09" data-share-badge-host="https://www.credly.com"></div>
+          <div class="badge-container card bg-[var(--surface)] p-4" data-iframe-width="150" data-iframe-height="270" data-share-badge-id="f61b26e5-f236-4f74-a963-90a7daa9d8c1" data-share-badge-host="https://www.credly.com"></div>
+        </div>
+      </section>
+
       <!-- Status -->
       <section class="mt-8 flex flex-wrap justify-center gap-4 text-sm text-[color:var(--muted)] animate-in">
         <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[color:var(--success)]"></span><span>NaN</span></div>
@@ -227,7 +449,277 @@
         updateTime();
         setInterval(updateTime, 60_000);
         document.getElementById('year').textContent = new Date().getFullYear();
+        
       });
+      
+      // Script do Credly carregado diretamente
+      (function() {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.credly.com/assets/utilities/embed.js';
+        script.async = true;
+        document.head.appendChild(script);
+      })();
+
+      // 🔧 Badge Text Fix System
+      (function() {
+        let badgeTextFixer = {
+          init() {
+            this.observeIframes();
+            this.observeThemeChanges();
+          },
+          
+          observeIframes() {
+            // Add loading state to all badge containers initially
+            document.querySelectorAll('.badge-container').forEach(container => {
+              container.classList.add('loading');
+              
+              // Set timeout for badges that don't load
+              setTimeout(() => {
+                if (container.classList.contains('loading')) {
+                  container.classList.remove('loading');
+                  container.classList.add('error');
+                  console.log('⏰ Badge timeout - possível problema com o Credly');
+                }
+              }, 10000);
+            });
+
+            const observer = new MutationObserver((mutations) => {
+              mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                  if (node.tagName === 'IFRAME') {
+                    this.processIframe(node);
+                  }
+                });
+              });
+            });
+            
+            observer.observe(document.body, {
+              childList: true,
+              subtree: true
+            });
+            
+            // Process existing iframes
+            document.querySelectorAll('iframe').forEach(iframe => {
+              this.processIframe(iframe);
+            });
+          },
+          
+          processIframe(iframe) {
+            const container = iframe.closest('.badge-container');
+            
+            iframe.addEventListener('load', () => {
+              setTimeout(() => {
+                this.fixIframeText(iframe);
+                
+                // Mark container as loaded
+                if (container) {
+                  container.classList.remove('loading');
+                  container.classList.add('loaded');
+                  
+                  // Check if all badges are loaded
+                  this.checkAllBadgesLoaded();
+                }
+              }, 1000);
+            });
+          },
+          
+          fixIframeText(iframe) {
+            try {
+              const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+              const currentTheme = document.documentElement.getAttribute('data-theme');
+              
+              // Inject styles
+              let style = iframeDoc.querySelector('#theme-fix-styles');
+              if (!style) {
+                style = iframeDoc.createElement('style');
+                style.id = 'theme-fix-styles';
+                iframeDoc.head.appendChild(style);
+              }
+              
+              // Estilos mais agressivos para modo escuro
+              if (currentTheme === 'dark') {
+                style.textContent = `
+                  * {
+                    color: #FFFFFF !important;
+                  }
+                  
+                  #badge-name, .badge-name, h3, [class*="name"] {
+                    color: #FFFFFF !important;
+                    text-shadow: 2px 2px 4px rgba(0,0,0,0.9) !important;
+                    background: rgba(0,0,0,0.8) !important;
+                    padding: 4px 8px !important;
+                    border-radius: 4px !important;
+                    display: -webkit-box !important;
+                    -webkit-line-clamp: 2 !important;
+                    line-clamp: 2 !important;
+                    -webkit-box-orient: vertical !important;
+                    overflow: hidden !important;
+                    word-wrap: break-word !important;
+                    overflow-wrap: break-word !important;
+                    hyphens: auto !important;
+                    line-height: 1.3 !important;
+                    margin-bottom: 8px !important;
+                    font-weight: 600 !important;
+                  }
+                  
+                  #badge-issuer, .badge-issuer, p, [class*="issuer"] {
+                    color: #E5E5E5 !important;
+                    text-shadow: 2px 2px 4px rgba(0,0,0,0.9) !important;
+                    background: rgba(0,0,0,0.7) !important;
+                    padding: 3px 6px !important;
+                    border-radius: 4px !important;
+                    display: -webkit-box !important;
+                    -webkit-line-clamp: 2 !important;
+                    line-clamp: 2 !important;
+                    -webkit-box-orient: vertical !important;
+                    overflow: hidden !important;
+                    word-wrap: break-word !important;
+                    overflow-wrap: break-word !important;
+                    hyphens: auto !important;
+                    line-height: 1.4 !important;
+                    cursor: help !important;
+                  }
+                  
+                  body, html {
+                    background: transparent !important;
+                  }
+                `;
+              } else {
+                // Modo claro (original)
+                const textColor = '#232F3E';
+                const shadowColor = 'rgba(255,255,255,0.3)';
+                
+                style.textContent = `
+                  #badge-name {
+                    color: ${textColor} !important;
+                    text-shadow: 0 1px 2px ${shadowColor} !important;
+                    display: -webkit-box !important;
+                    -webkit-line-clamp: 2 !important;
+                    line-clamp: 2 !important;
+                    -webkit-box-orient: vertical !important;
+                    overflow: hidden !important;
+                    word-wrap: break-word !important;
+                    overflow-wrap: break-word !important;
+                    hyphens: auto !important;
+                    line-height: 1.3 !important;
+                    margin-bottom: 8px !important;
+                  }
+                  
+                  #badge-issuer {
+                    color: ${textColor} !important;
+                    text-shadow: 0 1px 2px ${shadowColor} !important;
+                    display: -webkit-box !important;
+                    -webkit-line-clamp: 2 !important;
+                    line-clamp: 2 !important;
+                    -webkit-box-orient: vertical !important;
+                    overflow: hidden !important;
+                    word-wrap: break-word !important;
+                    overflow-wrap: break-word !important;
+                    hyphens: auto !important;
+                    line-height: 1.4 !important;
+                    cursor: help !important;
+                  }
+                `;
+              }
+              
+              // Add tooltips for truncated text
+              this.addTooltips(iframeDoc);
+              
+              console.log('✅ Badge text fixed for theme:', currentTheme);
+              
+            } catch (error) {
+              console.log('⚠️ Badge text fix: Cannot access iframe content (cross-origin)');
+            }
+          },
+          
+          addTooltips(iframeDoc) {
+            const badgeName = iframeDoc.querySelector('#badge-name');
+            const badgeIssuer = iframeDoc.querySelector('#badge-issuer');
+            
+            [badgeName, badgeIssuer].forEach(element => {
+              if (element && this.isTextTruncated(element)) {
+                const fullText = element.textContent || element.innerText;
+                element.setAttribute('title', fullText);
+              }
+            });
+          },
+          
+          isTextTruncated(element) {
+            return element.scrollHeight > element.clientHeight || 
+                   element.scrollWidth > element.clientWidth;
+          },
+          
+          checkAllBadgesLoaded() {
+            const containers = document.querySelectorAll('.badge-container');
+            const loadedCount = document.querySelectorAll('.badge-container.loaded').length;
+            const errorCount = document.querySelectorAll('.badge-container.error').length;
+            const totalProcessed = loadedCount + errorCount;
+            
+            if (totalProcessed === containers.length && containers.length > 0) {
+              console.log(`🎉 Processamento completo! ${loadedCount} badges carregados, ${errorCount} com erro`);
+              
+              // Show success message if at least one badge loaded
+              if (loadedCount > 0) {
+                this.showToast(`✅ ${loadedCount} badges carregados com sucesso!`, 'success');
+              }
+              
+              // Show warning if there are errors
+              if (errorCount > 0) {
+                this.showToast(`⚠️ ${errorCount} badges não carregaram`, 'warning');
+              }
+            }
+          },
+
+          showToast(message, type = 'info') {
+            // Simple toast notification
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-4 right-4 px-4 py-2 rounded-lg text-white z-50 transition-all duration-300 translate-y-0 opacity-100`;
+            
+            if (type === 'success') {
+              toast.style.background = '#10b981';
+            } else if (type === 'warning') {
+              toast.style.background = '#f59e0b';
+            } else {
+              toast.style.background = '#6b7280';
+            }
+            
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+              toast.style.transform = 'translateY(100%)';
+              toast.style.opacity = '0';
+              setTimeout(() => toast.remove(), 300);
+            }, 4000);
+          },
+
+          observeThemeChanges() {
+            const observer = new MutationObserver((mutations) => {
+              mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                  console.log('🎨 Tema alterado, atualizando badges...');
+                  
+                  // Re-process all iframes when theme changes
+                  setTimeout(() => {
+                    document.querySelectorAll('iframe').forEach(iframe => {
+                      this.fixIframeText(iframe);
+                    });
+                  }, 100);
+                }
+              });
+            });
+            
+            observer.observe(document.documentElement, {
+              attributes: true,
+              attributeFilter: ['data-theme']
+            });
+          }
+        };
+        
+        // Initialize badge text fixer
+        badgeTextFixer.init();
+      })();
 
       // Ações header
       document.getElementById('shareBtn').addEventListener('click', copyLink);
