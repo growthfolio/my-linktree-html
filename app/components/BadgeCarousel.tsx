@@ -12,7 +12,7 @@ import 'swiper/css/pagination'
 
 interface BadgeData {
   id: string
-  title: string
+  title?: string
   date?: string
   level?: 'Associate' | 'Professional' | 'Specialty'
   featured?: boolean
@@ -25,9 +25,9 @@ interface BadgeCarouselProps {
 // Loading component
 function CarouselSkeleton() {
   return (
-    <div className="px-4 pb-12">
-      <div className="flex justify-center animate-pulse">
-        <div className="w-72 h-80 rounded-xl" style={{ backgroundColor: '#374151' }} />
+    <div className="px-4">
+      <div className="flex justify-center">
+        <div className="w-72 h-80" style={{ backgroundColor: '#374151' }} />
       </div>
     </div>
   )
@@ -60,7 +60,7 @@ function BadgeCarouselContent({ badges }: BadgeCarouselProps) {
         className="pb-12"
       >
         {badges.map((badge) => (
-          <SwiperSlide key={badge.id} className="flex justify-center">
+          <SwiperSlide key={badge.id} className="flex justify-center items-center">
             <CredlyBadge 
               badgeId={badge.id}
               title={badge.title}

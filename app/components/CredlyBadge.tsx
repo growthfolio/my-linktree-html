@@ -25,12 +25,38 @@ export default function CredlyBadge({
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+  const [badgeData, setBadgeData] = useState<{
+    name?: string
+    issuedOn?: string
+  }>({})
   const containerRef = useRef<HTMLDivElement>(null)
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  // Busca os dados reais do badge da API do Credly
+  useEffect(() => {
+    if (!isMounted) return
+
+    const fetchBadgeData = async () => {
+      try {
+        const response = await fetch(`https://www.credly.com/api/v1/obi/v2/badges/${badgeId}`)
+        if (response.ok) {
+          const data = await response.json()
+          setBadgeData({
+            name: data.badge?.name || data.name,
+            issuedOn: data.issuedOn || data.issued_on
+          })
+        }
+      } catch (error) {
+        console.log('Não foi possível buscar metadados do badge, usando dados do iframe')
+      }
+    }
+
+    fetchBadgeData()
+  }, [badgeId, isMounted])
 
   useEffect(() => {
     if (!isMounted || !containerRef.current) return
@@ -117,7 +143,11 @@ export default function CredlyBadge({
   if (hasError) {
     return (
       <div className="flex flex-col gap-2">
-        {title && <h3 className="text-center font-semibold text-[var(--text)] truncate">{title}</h3>}
+        {(title || badgeData.name) && (
+          <h3 className="text-center font-semibold text-[var(--text)] truncate">
+            {title || badgeData.name}
+          </h3>
+        )}
         
         <div className="w-72 h-80 rounded-xl border-2 border-red-500/30 bg-gradient-to-br from-red-500/10 to-orange-500/10 flex flex-col items-center justify-center p-6 gap-3">
           <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center">
@@ -139,23 +169,30 @@ export default function CredlyBadge({
           </a>
         </div>
         
-        {date && <p className="text-xs text-center text-[var(--muted)]">{date}</p>}
+        {(date || badgeData.issuedOn) && (
+          <p className="text-xs text-center text-[var(--muted)]">
+            {date || (badgeData.issuedOn ? new Date(badgeData.issuedOn).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }) : '')}
+          </p>
+        )}
       </div>
     )
   }
 
+  const displayTitle = title || badgeData.name
+  const displayDate = date || (badgeData.issuedOn ? new Date(badgeData.issuedOn).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }) : undefined)
+
   return (
     <div className="flex flex-col gap-3">
       {/* Header com título e data */}
-      {(title || date) && (
+      {(displayTitle || displayDate) && (
         <div className="text-center space-y-1">
-          {title && (
+          {displayTitle && (
             <h3 className="font-semibold text-[var(--text)] truncate max-w-[288px]">
-              {title}
+              {displayTitle}
             </h3>
           )}
-          {date && (
-            <p className="text-xs text-[var(--muted)]">{date}</p>
+          {displayDate && (
+            <p className="text-xs text-[var(--muted)]">{displayDate}</p>
           )}
         </div>
       )}
