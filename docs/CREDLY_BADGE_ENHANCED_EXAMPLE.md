@@ -1,3 +1,10 @@
+# 🎨 Exemplo Prático: CredlyBadge Melhorado
+
+Aqui está uma versão melhorada do componente `CredlyBadge` com várias opções de customização do "body" (container):
+
+## 📦 Componente com Todas as Features
+
+```tsx
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
@@ -13,7 +20,7 @@ interface CredlyBadgeProps {
   showHoverEffect?: boolean
 }
 
-export default function CredlyBadge({ 
+export default function CredlyBadgeEnhanced({ 
   badgeId,
   featured = false,
   title,
@@ -37,39 +44,29 @@ export default function CredlyBadge({
 
     const loadBadge = () => {
       try {
-        // Limpa conteúdo anterior
         containerRef.current!.innerHTML = ''
 
-        // Cria o div do badge exatamente como no código oficial
         const badgeDiv = document.createElement('div')
         badgeDiv.setAttribute('data-iframe-width', '280')
         badgeDiv.setAttribute('data-iframe-height', '320')
         badgeDiv.setAttribute('data-share-badge-id', badgeId)
         badgeDiv.setAttribute('data-share-badge-host', 'https://www.credly.com')
 
-        // Cria o script exatamente como no código oficial
         const script = document.createElement('script')
         script.type = 'text/javascript'
         script.async = true
         script.src = '//cdn.credly.com/assets/utilities/embed.js'
 
-        // Adiciona os elementos ao container
         containerRef.current!.appendChild(badgeDiv)
         containerRef.current!.appendChild(script)
 
-        // Monitora o carregamento
         script.onload = () => {
-          // Aguarda um tempo para o iframe ser criado
           setTimeout(() => {
             const iframe = containerRef.current?.querySelector('iframe')
             if (iframe) {
               setIsLoaded(true)
-              // Adiciona listener para quando o iframe carregar completamente
-              iframe.onload = () => {
-                setIsLoaded(true)
-              }
+              iframe.onload = () => setIsLoaded(true)
             } else {
-              // Se não encontrou iframe, tenta novamente após mais tempo
               setTimeout(() => {
                 const retryIframe = containerRef.current?.querySelector('iframe')
                 if (retryIframe) {
@@ -82,11 +79,8 @@ export default function CredlyBadge({
           }, 1000)
         }
 
-        script.onerror = () => {
-          setHasError(true)
-        }
+        script.onerror = () => setHasError(true)
 
-        // Timeout de segurança
         setTimeout(() => {
           if (!isLoaded && !hasError) {
             const iframe = containerRef.current?.querySelector('iframe')
@@ -104,7 +98,6 @@ export default function CredlyBadge({
       }
     }
 
-    // Pequeno delay para garantir que o DOM está pronto
     const timer = setTimeout(loadBadge, 100)
     return () => clearTimeout(timer)
   }, [badgeId, isMounted, isLoaded, hasError])
@@ -258,3 +251,74 @@ export default function CredlyBadge({
     </div>
   )
 }
+```
+
+## 🎯 Como Usar
+
+### Exemplo 1: Badge Simples
+```tsx
+<CredlyBadgeEnhanced badgeId="5666c0c4-e3e8-41b5-afa8-f0e14ac3ae85" />
+```
+
+### Exemplo 2: Badge com Título e Data
+```tsx
+<CredlyBadgeEnhanced 
+  badgeId="5666c0c4-e3e8-41b5-afa8-f0e14ac3ae85"
+  title="AWS Solutions Architect"
+  date="Obtido em Jan 2024"
+/>
+```
+
+### Exemplo 3: Badge Destaque com Nível
+```tsx
+<CredlyBadgeEnhanced 
+  badgeId="5666c0c4-e3e8-41b5-afa8-f0e14ac3ae85"
+  featured={true}
+  level="Professional"
+  title="AWS Solutions Architect"
+  date="Obtido em Jan 2024"
+/>
+```
+
+### Exemplo 4: Badge com Click Handler
+```tsx
+<CredlyBadgeEnhanced 
+  badgeId="5666c0c4-e3e8-41b5-afa8-f0e14ac3ae85"
+  title="AWS Solutions Architect"
+  onClick={() => {
+    console.log('Badge clicado!')
+    // Abrir modal, navegar, etc.
+  }}
+/>
+```
+
+### Exemplo 5: Badge sem Hover Effect
+```tsx
+<CredlyBadgeEnhanced 
+  badgeId="5666c0c4-e3e8-41b5-afa8-f0e14ac3ae85"
+  showHoverEffect={false}
+/>
+```
+
+## 🎨 Customizações Visuais Disponíveis
+
+| Feature | Descrição | Prop |
+|---------|-----------|------|
+| **Badge Destaque** | Selo "⭐ Destaque" no canto | `featured={true}` |
+| **Título** | Título acima do card | `title="..."` |
+| **Data** | Data abaixo do título | `date="..."` |
+| **Nível** | Badge inferior com nível | `level="Professional"` |
+| **Hover Effect** | Borda animada + escala | `showHoverEffect={true}` |
+| **Click Handler** | Ação ao clicar | `onClick={() => {}}` |
+| **Tooltip** | Dica no hover | Automático se `onClick` |
+
+## 🚀 Próximos Passos
+
+Se quiser implementar, posso:
+
+1. ✅ Substituir o componente atual
+2. ✅ Atualizar o BadgesSection.tsx com os novos parâmetros
+3. ✅ Adicionar dados estruturados (títulos, datas, níveis)
+4. ✅ Testar o build
+
+**Quer que eu implemente isso no projeto?** 🎯

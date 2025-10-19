@@ -40,7 +40,7 @@ export default function SocialLinks() {
           href={link.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="card flex items-center gap-4 bg-[var(--surface)] hover:bg-[var(--surface-2)] transition p-4"
+          className="rounded-card flex items-center gap-4 bg-[var(--surface)] hover:bg-[var(--surface-2)] transition p-4"
         >
           <i className={`${link.icon} text-2xl`}></i>
           <div className="text-left">

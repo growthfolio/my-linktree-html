@@ -6,7 +6,7 @@ import BadgesSection from './components/BadgesSection'
 export default function Home() {
   return (
     <>
-      <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:bg-[var(--surface)] focus:text-[var(--text)] focus:px-3 focus:py-2 focus:rounded-md ring-focus">Pular para conteúdo</a>
+      <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:bg-[var(--surface)] focus:text-[var(--text)] focus:px-3 focus:py-2 focus:rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--ring)] focus-visible:outline-offset-2">Pular para conteúdo</a>
       
       <Header />
       

@@ -43,7 +43,7 @@ export default function ShareButton() {
   return (
     <button 
       onClick={handleShare}
-      className="btn ring-focus px-3 py-2 bg-[var(--surface-2)] hover:bg-[var(--surface)] transition flex items-center justify-center" 
+      className="rounded-btn focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--ring)] focus-visible:outline-offset-2 px-3 py-2 bg-[var(--surface-2)] hover:bg-[var(--surface)] transition flex items-center justify-center" 
       aria-label="Copiar link da página" 
       title="Compartilhar link"
     >
