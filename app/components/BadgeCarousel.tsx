@@ -60,19 +60,19 @@ function BadgeCarouselContent({ badges }: BadgeCarouselProps) {
         breakpoints={{
           640: {
             slidesPerView: 2,
-            spaceBetween: 20,
+            spaceBetween: 32,
             centeredSlides: false,
           },
           1024: {
-            slidesPerView: 3,
-            spaceBetween: 24,
+            slidesPerView: 2.5,
+            spaceBetween: 44,
             centeredSlides: false,
           },
         }}
-        className="pb-16"
+        className="pb-16 !px-2"
       >
         {badges.map((badge) => (
-          <SwiperSlide key={badge.id} className="flex justify-center">
+          <SwiperSlide key={badge.id} className="flex justify-center px-2">
             <CredlyBadgeCard badge={badge} />
           </SwiperSlide>
         ))}
