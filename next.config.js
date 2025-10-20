@@ -1,9 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Removido 'output: export' para permitir API Routes
   trailingSlash: true,
   images: {
-    unoptimized: true
+    // Permitir imagens externas do Credly
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.credly.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.credly.com',
+      }
+    ]
   }
 }
 

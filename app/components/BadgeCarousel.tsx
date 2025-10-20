@@ -1,25 +1,17 @@
 'use client'
 
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination } from 'swiper/modules'
 import { Suspense } from 'react'
-import CredlyBadge from './CredlyBadge'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination, Autoplay } from 'swiper/modules'
+import CredlyBadgeCard from './CredlyBadgeCard'
+import type { BadgeDisplayData } from '@/types/credly'
 
 // Import Swiper styles
 import 'swiper/css'
-import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
-interface BadgeData {
-  id: string
-  title?: string
-  date?: string
-  level?: 'Associate' | 'Professional' | 'Specialty'
-  featured?: boolean
-}
-
 interface BadgeCarouselProps {
-  badges: BadgeData[]
+  badges: Array<BadgeDisplayData & { featured?: boolean }>
 }
 
 // Loading component
@@ -36,11 +28,31 @@ function CarouselSkeleton() {
 function BadgeCarouselContent({ badges }: BadgeCarouselProps) {
   return (
     <div className="px-4">
+      <style jsx global>{`
+        .swiper-pagination-bullet {
+          background: rgba(255, 255, 255, 0.5);
+          opacity: 1;
+          width: 10px;
+          height: 10px;
+        }
+        .swiper-pagination-bullet-active {
+          background: var(--brand);
+          width: 12px;
+          height: 12px;
+        }
+      `}</style>
       <Swiper
-        modules={[Pagination]}
+        modules={[Pagination, Autoplay]}
         slidesPerView={1}
         spaceBetween={20}
         centeredSlides={true}
+        loop={true}
+        autoplay={{
+          delay: 3500,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        speed={800}
         pagination={{
           clickable: true,
           dynamicBullets: true,
@@ -57,17 +69,11 @@ function BadgeCarouselContent({ badges }: BadgeCarouselProps) {
             centeredSlides: false,
           },
         }}
-        className="pb-12"
+        className="pb-16"
       >
         {badges.map((badge) => (
-          <SwiperSlide key={badge.id} className="flex justify-center items-center">
-            <CredlyBadge 
-              badgeId={badge.id}
-              title={badge.title}
-              date={badge.date}
-              level={badge.level}
-              featured={badge.featured}
-            />
+          <SwiperSlide key={badge.id} className="flex justify-center">
+            <CredlyBadgeCard badge={badge} />
           </SwiperSlide>
         ))}
       </Swiper>

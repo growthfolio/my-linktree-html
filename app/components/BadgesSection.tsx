@@ -1,51 +1,57 @@
+import { BADGE_IDS } from '@/config/badges'
+import { transformBadgeData } from '@/types/credly'
+import type { CredlyBadgeData, BadgeDisplayData } from '@/types/credly'
 import BadgeCarousel from './BadgeCarousel'
 
-interface BadgeData {
-  id: string
-  title?: string
-  date?: string
-  level?: 'Associate' | 'Professional' | 'Specialty'
-  featured?: boolean
+/**
+ * Busca dados de um badge via API interna (SSR)
+ */
+async function fetchBadgeData(badgeId: string): Promise<BadgeDisplayData | null> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    const response = await fetch(`${baseUrl}/api/credly/${badgeId}`, {
+      next: { revalidate: 3600 }, // Cache de 1 hora
+      cache: 'force-cache'
+    })
+
+    if (!response.ok) {
+      console.error(`Erro ao buscar badge ${badgeId}: ${response.status}`)
+      return null
+    }
+
+    const data: CredlyBadgeData = await response.json()
+    return transformBadgeData(data)
+  } catch (error) {
+    console.error(`Erro ao processar badge ${badgeId}:`, error)
+    return null
+  }
 }
 
-// Apenas os IDs - os nomes serão buscados automaticamente da API do Credly
-const badges: BadgeData[] = [
-  {
-    id: '5666c0c4-e3e8-41b5-afa8-f0e14ac3ae85',
-    featured: true
-  },
-  {
-    id: '3e0210b2-b5a7-42ed-8ba8-b099d35348ca',
-  },
-  {
-    id: '7f62f225-3005-4043-b762-eb608f07636b',
-  },
-  {
-    id: '947a0b6f-ebd4-4089-9158-48dc187c5068',
-    featured: true
-  },
-  {
-    id: '0ce03a22-0f7a-42a4-b12d-408ccf4441d9',
-  },
-  {
-    id: 'c1cb7ff3-a435-4f34-a046-dd5a1a885d09',
-  },
-  {
-    id: 'f61b26e5-f236-4f74-a963-90a7daa9d8c1',
-  },
-  {
-    id: '1e2ca8f1-6abd-4487-979b-0d2d22077df4',
-  }
-]
+/**
+ * Server Component que busca os badges no servidor
+ */
+export default async function BadgesSection() {
+  // Busca todos os badges em paralelo
+  const badgeIds = BADGE_IDS.map(b => b.id)
+  const badgesData = await Promise.all(
+    badgeIds.map(id => fetchBadgeData(id))
+  )
 
-export default function BadgesSection() {
+  // Filtra badges que falharam e adiciona flag de featured
+  const badges: Array<BadgeDisplayData & { featured?: boolean }> = badgesData
+    .filter((badge): badge is BadgeDisplayData => badge !== null)
+    .map(badge => ({
+      ...badge,
+      featured: BADGE_IDS.find(b => b.id === badge.id)?.featured
+    }))
+
   return (
     <section className="mt-12">
       {/* Section Header */}
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold mb-2">🏆 Certificações AWS</h2>
+        <h2 className="text-2xl font-bold mb-2">🏆 Minhas Badges</h2>
         <p className="text-sm text-[color:var(--muted)]">
-          Certificações oficiais da Amazon Web Services
+          Certificações oficiais com dados do Credly
         </p>
       </div>
       

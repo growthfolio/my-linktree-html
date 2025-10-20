@@ -68,8 +68,8 @@ export default function CredlyBadge({
 
         // Cria o div do badge exatamente como no código oficial
         const badgeDiv = document.createElement('div')
-        badgeDiv.setAttribute('data-iframe-width', '280')
-        badgeDiv.setAttribute('data-iframe-height', '320')
+        badgeDiv.setAttribute('data-iframe-width', '327')
+        badgeDiv.setAttribute('data-iframe-height', '274')
         badgeDiv.setAttribute('data-share-badge-id', badgeId)
         badgeDiv.setAttribute('data-share-badge-host', 'https://www.credly.com')
 
@@ -182,7 +182,7 @@ export default function CredlyBadge({
   const displayDate = date || (badgeData.issuedOn ? new Date(badgeData.issuedOn).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }) : undefined)
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2 items-center">
       {/* Header com título e data */}
       {(displayTitle || displayDate) && (
         <div className="text-center space-y-1">
@@ -206,48 +206,28 @@ export default function CredlyBadge({
         style={{ cursor: onClick ? 'pointer' : 'default' }}
       >
         {/* Badge de destaque (canto superior direito) */}
-        {featured && (
+        {/* {featured && (
           <div className="absolute -top-2 -right-2 z-20 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
             ⭐ Destaque
           </div>
         )}
-        
+         */}
         {/* Borda brilhante animada (aparece no hover) */}
         {showHoverEffect && (
           <div 
-            className={`absolute -inset-1 bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 rounded-xl blur transition-all duration-300 ${
-              isHovered ? 'opacity-60 animate-pulse' : 'opacity-0'
+            className={`absolute -inset-1 bg-gradient-to-r from-white/50 via-white/80 to-white blur transition-all duration-200 ${
+              isHovered ? 'opacity-90 animate-pulse' : 'opacity-0'
             }`}
           />
         )}
         
-        {/* Card principal */}
+        {/* Card principal - sem padding, justo ao conteúdo */}
         <div 
-          className={`
-            relative w-72 h-80 
-            flex items-center justify-center 
-            bg-[var(--surface)] rounded-xl
-            border-2 transition-all duration-300
-            ${isHovered && showHoverEffect
-              ? 'border-[var(--brand)] shadow-2xl shadow-[var(--brand)]/20 scale-[1.02]' 
-              : 'border-[var(--surface-2)] shadow-lg'
-            }
-          `}
+          className="relative w-fit h-fit"
         >
-          {/* Background decorativo */}
-          <div className="absolute inset-0 overflow-hidden rounded-xl">
-            <div 
-              className="absolute inset-0 opacity-5"
-              style={{
-                backgroundImage: 'radial-gradient(circle at 2px 2px, var(--brand) 1px, transparent 0)',
-                backgroundSize: '24px 24px'
-              }}
-            />
-          </div>
-          
           {/* Loading skeleton */}
           {!isLoaded && (
-            <div className="absolute inset-0 rounded-xl animate-pulse flex flex-col items-center justify-center gap-3 bg-[var(--surface-2)]">
+            <div className="w-[280px] h-[320px] rounded-xl animate-pulse flex flex-col items-center justify-center gap-3 bg-[var(--surface-2)]">
               <div className="w-20 h-20 rounded-full bg-[var(--surface)]" />
               <div className="space-y-2">
                 <div className="w-32 h-3 rounded bg-[var(--surface)]" />
@@ -259,13 +239,11 @@ export default function CredlyBadge({
             </div>
           )}
           
-          {/* Container do iframe */}
+          {/* Container do iframe - sem espaçamento extra */}
           <div 
             ref={containerRef} 
-            className={`relative z-10 transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+            className={`relative transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
             style={{
-              width: '280px',
-              height: '320px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -274,7 +252,7 @@ export default function CredlyBadge({
           
           {/* Overlay de hover (opcional - para analytics) */}
           {onClick && isLoaded && (
-            <div className="absolute inset-0 bg-transparent hover:bg-black/5 transition-colors rounded-xl z-20" />
+            <div className="absolute inset-0 bg-transparent hover:bg-black/5 transition-colors z-20" />
           )}
         </div>
         

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Header from './components/Header'
 import Profile from './components/Profile'
 import SocialLinks from './components/SocialLinks'
@@ -26,6 +27,21 @@ export default function Home() {
         <Profile />
         <SocialLinks />
         <BadgesSection />
+        
+        {/* Link para página completa de badges */}
+        {/* <div className="mt-8 text-center">
+          <Link 
+            href="/badges"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--brand)] text-white font-medium hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl hover:shadow-[var(--brand)]/30 transition-all"
+          >
+            <i className="ph-bold ph-certificate text-xl"></i>
+            <span>Ver Todas as Certificações</span>
+            <i className="ph-bold ph-arrow-right"></i>
+          </Link>
+          <p className="mt-3 text-xs text-[var(--muted)]">
+            Layout customizado com dados da API do Credly
+          </p>
+        </div> */}
         
         <section className="mt-8 flex flex-wrap justify-center gap-4 text-sm text-[color:var(--muted)]">
           <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[color:var(--success)]"></span><span>Online</span></div>
